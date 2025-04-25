@@ -1,4 +1,4 @@
-package com.challenge.myapplication.internal.ui
+package com.challenge.myapplication.ui.screens
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Button
