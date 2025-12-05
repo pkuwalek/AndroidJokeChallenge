@@ -15,7 +15,7 @@ import com.challenge.myapplication.ui.JokesViewModel
 
 @Composable
 internal fun EntryScreen() {
-    val jokesViewModel: JokesViewModel = viewModel(factory = JokesViewModel.Factory)
+    val jokesViewModel: JokesViewModel = viewModel()
     val uiState by jokesViewModel.uiState.collectAsState()
     Column(
         modifier = Modifier.fillMaxSize(),

@@ -7,7 +7,9 @@ import androidx.activity.enableEdgeToEdge
 import com.challenge.myapplication.ui.JokesViewModel
 import com.challenge.myapplication.ui.screens.EntryScreen
 import com.challenge.myapplication.ui.theme.AndroidChallengeTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
