@@ -1,6 +1,7 @@
 package com.challenge.myapplication.network
 
 import com.challenge.myapplication.data.JokesRepository
+import com.challenge.myapplication.data.JokesRepositoryImpl
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -24,12 +25,18 @@ class DefaultAppContainer : JokesAppContainer {
         .build()
 
     private val retrofit = Retrofit.Builder()
-        .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
         .baseUrl(apiUrl)
+        .addConverterFactory(Json {
+            ignoreUnknownKeys = true
+        }.asConverterFactory("application/json".toMediaType()))
         .client(client)
         .build()
-        .create(JokesApiService::class.java)
+    
+    private val retrofitService: JokesApiService by lazy {
+        retrofit.create(JokesApiService::class.java)
+    }
 
-    override val jokesRepository: JokesRepository
-        get() = TODO("Not yet implemented")
+    override val jokesRepository: JokesRepository by lazy {
+        JokesRepositoryImpl(retrofitService)
+    }
 }

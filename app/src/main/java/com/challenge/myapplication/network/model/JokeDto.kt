@@ -1,53 +1,59 @@
 package com.challenge.myapplication.network.model
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class JokeDto(
-    @JsonProperty("category")
     val category: CategoryDto,
-    @JsonProperty("type")
     val type: TypeDto,
-    @JsonProperty("joke")
-    val joke: List<String>,
-    @JsonProperty("flags")
-    val flags: Set<FlagDto>,
-    @JsonProperty("id")
+
+    // SINGLE joke → present only for single
+    val joke: String? = null,
+
+    // TWOPART joke → present only for twopart
+    val setup: String? = null,
+    val delivery: String? = null,
+
+    val flags: FlagDto,
     val id: Int,
-    @JsonProperty("safe")
     val safe: Boolean,
-    @JsonProperty("language")
-    val lang: String,
+    @SerialName("lang")
+    val lang: String
 )
 
+@Serializable
 enum class CategoryDto {
-    @JsonProperty("Any")
+    @SerialName("Any")
     ANY,
-    @JsonProperty("Programming")
+    @SerialName("Programming")
     PROGRAMMING,
-    @JsonProperty("Misc")
+    @SerialName("Misc")
     MISC,
-    @JsonProperty("Dark")
+    @SerialName("Dark")
     DARK,
-    @JsonProperty("Pun")
+    @SerialName("Pun")
     PUN,
-    @JsonProperty("Spooky")
+    @SerialName("Spooky")
     SPOOKY,
-    @JsonProperty("Christmas")
-    CHRISTMAS
+    @SerialName("Christmas")
+    CHRISTMAS,
 }
 
+@Serializable
 enum class TypeDto {
-    @JsonProperty("single")
+    @SerialName("single")
     SINGLE,
-    @JsonProperty("twopart")
+    @SerialName("twopart")
     TWOPART,
 }
 
+@Serializable
 data class FlagDto(
     val nsfw: Boolean,
     val religious: Boolean,
     val political: Boolean,
     val racist: Boolean,
     val sexist: Boolean,
-    val explicit: Boolean
+    val explicit: Boolean,
 )

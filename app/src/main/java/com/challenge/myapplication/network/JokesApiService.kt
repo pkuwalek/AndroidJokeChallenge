@@ -4,6 +4,6 @@ import com.challenge.myapplication.network.model.JokeDto
 import retrofit2.http.GET
 
 interface JokesApiService {
-    @GET("joke")
+    @GET("joke/Any")
     suspend fun getRandomJoke(): JokeDto
 }
