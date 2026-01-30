@@ -10,6 +10,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,6 +44,7 @@ private fun ScreenContent(
     joke: JokeUiModel?,
     loadNextJoke: () -> Unit,
 ) {
+    var punchlineVisible by remember { mutableStateOf(false) }
     Box(
         modifier = Modifier.fillMaxSize(),
     ) {
@@ -57,15 +61,20 @@ private fun ScreenContent(
                 )
             }
             joke?.bottomText?.let {
-                Text(
-                    text = it,
-                )
-            }
-            // TODO implement the logic and fix the mapping
-            Button(
-                onClick = {},
-            ) {
-                Text(text = "show punchline")
+                if (!punchlineVisible) {
+                    Button(
+                        onClick = {
+                            punchlineVisible = true
+                        },
+                    ) {
+                        Text(text = "show punchline")
+                    }
+                }
+                if (punchlineVisible) {
+                    Text(
+                        text = it,
+                    )
+                }
             }
         }
 
@@ -76,7 +85,7 @@ private fun ScreenContent(
             onClick = loadNextJoke,
         ) {
             Text(
-                text = "another one",
+                text = "show another one",
             )
         }
     }
