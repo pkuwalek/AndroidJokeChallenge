@@ -19,24 +19,32 @@ internal class JokesViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(JokesScreenState())
     internal val uiState by lazy {
-        getRandomJoke()
+        initScreen()
         _uiState.asStateFlow()
     }
 
-    fun loadNextJoke() {
-        getRandomJoke()
+    private fun initScreen() {
+        _uiState.update {
+            it.copy(
+                showContent = JokeScreenContent(),
+                error = false,
+            )
+        }
     }
 
-    private fun getRandomJoke() {
+    fun onDismissDialog() {
         _uiState.update {
-            it.copy(loading = true)
+            it.copy(showRandomJokeDialog = false)
         }
+    }
+
+    fun onRandomJokeCtaClick() {
         viewModelScope.launch {
             getJokeUseCase.invoke().ifRight { joke ->
                 _uiState.update {
                     it.copy(
-                        loading = false,
-                        joke = uiModelMapper.mapJokeToUiModel(joke),
+                        showContent = it.showContent?.copy(joke = uiModelMapper.mapJokeToUiModel(joke)),
+                        showRandomJokeDialog = true,
                     )
                 }
             }.ifLeft { _ ->
@@ -44,7 +52,6 @@ internal class JokesViewModel @Inject constructor(
                     it.copy(error = true)
                 }
             }
-
         }
     }
 }
