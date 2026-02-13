@@ -1,10 +1,14 @@
 package com.challenge.myapplication.ui.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -14,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.challenge.myapplication.ui.JokesViewModel
-import com.challenge.myapplication.ui.model.JokeUiModel
+import com.challenge.myapplication.ui.base.EntryButton
 import com.challenge.myapplication.ui.screens.singlejoke.SingleJokeDialog
 import com.challenge.myapplication.ui.theme.AndroidChallengeTheme
 
@@ -44,31 +48,25 @@ internal fun EntryScreen() {
      onRandomJokeCtaClick: () -> Unit,
  ) {
      Column(
-         modifier = Modifier.fillMaxSize(),
+         modifier = Modifier
+             .fillMaxSize()
+             .background(color = MaterialTheme.colorScheme.background),
          verticalArrangement = Arrangement.SpaceEvenly,
          horizontalAlignment = Alignment.CenterHorizontally,
      ) {
-         Button(
-             onClick = {
-                 onRandomJokeCtaClick()
-             },
-         ) {
-             Text(text = "random joke")
-         }
-         Button(
-             onClick = {
-                 // TODO implement
-             },
-         ) {
-             Text(text = "text input")
-         }
-         Button(
-             onClick = {
-                 // TODO implement
-             },
-         ) {
-             Text(text = "joke list")
-         }
+         EntryButton(
+             text = "random joke",
+             onClick = onRandomJokeCtaClick,
+             modifier = Modifier.fillMaxWidth(.5f),
+         )
+         EntryButton(
+             text = "text input",
+             modifier = Modifier.fillMaxWidth(.5f),
+         )
+         EntryButton(
+             text = "joke list",
+             modifier = Modifier.fillMaxWidth(.5f),
+         )
      }
  }
 
