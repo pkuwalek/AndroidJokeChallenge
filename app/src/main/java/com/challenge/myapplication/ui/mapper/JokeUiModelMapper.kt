@@ -22,6 +22,7 @@ class JokeUiModelMapper @Inject constructor() {
             null
         }
         return JokeUiModel(
+            id = joke.id,
             topText =  topText,
             bottomText = bottomText,
             category = joke.category.value,
