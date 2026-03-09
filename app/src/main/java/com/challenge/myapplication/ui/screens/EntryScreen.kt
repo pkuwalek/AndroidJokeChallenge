@@ -7,45 +7,30 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.navigation.NavController
-import com.challenge.myapplication.navigation.NavigationEvent
-import com.challenge.myapplication.navigation.Routes
 import com.challenge.myapplication.ui.JokesViewModel
 import com.challenge.myapplication.ui.base.EntryButton
 import com.challenge.myapplication.ui.screens.singlejoke.SingleJokeDialog
 import com.challenge.myapplication.ui.theme.AndroidChallengeTheme
 
 @Composable
-internal fun EntryScreen(navController: NavController) {
+internal fun EntryScreen(
+    onJokeListCtaClick: () -> Unit,
+) {
     val jokesViewModel: JokesViewModel = hiltViewModel()
     val uiState by jokesViewModel.uiState.collectAsState()
-
-    LaunchedEffect(Unit) {
-        jokesViewModel.navigationEvent.collect { event ->
-            when (event) {
-                NavigationEvent.NavigateToJokeList -> {
-                    navController.navigate(Routes.JOKE_LIST)
-                }
-                NavigationEvent.NavigateBack -> {
-                    navController.popBackStack()
-                }
-            }
-        }
-    }
 
     when  {
         uiState.error -> { ErrorScreen() }
         uiState.showContent != null -> {
             EntryScreenContent(
                 onRandomJokeCtaClick = { jokesViewModel.onRandomJokeCtaClick() },
-                onJokeListCtaClick = { jokesViewModel.onJokeListCtaClick() },
+                onJokeListCtaClick = { onJokeListCtaClick() },
             )
         }
     }

@@ -3,12 +3,9 @@ package com.challenge.myapplication.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.challenge.myapplication.data.usecase.GetJokeUseCase
-import com.challenge.myapplication.navigation.NavigationEvent
 import com.challenge.myapplication.ui.mapper.JokeUiModelMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -25,9 +22,6 @@ internal class JokesViewModel @Inject constructor(
         initScreen()
         _uiState.asStateFlow()
     }
-
-    private val _navigationEvent = MutableSharedFlow<NavigationEvent>()
-    val navigationEvent = _navigationEvent.asSharedFlow()
 
     private fun initScreen() {
         _uiState.update {
@@ -58,12 +52,6 @@ internal class JokesViewModel @Inject constructor(
                     it.copy(error = true)
                 }
             }
-        }
-    }
-
-    fun onJokeListCtaClick() {
-        viewModelScope.launch {
-            _navigationEvent.emit(NavigationEvent.NavigateToJokeList)
         }
     }
 }

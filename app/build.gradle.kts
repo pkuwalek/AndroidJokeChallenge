@@ -9,12 +9,12 @@ plugins {
 
 android {
     namespace = "com.challenge.myapplication"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.challenge.myapplication"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -61,8 +61,10 @@ dependencies {
     implementation(libs.logging.interceptor)
     implementation(libs.javax.inject)
     implementation(libs.hilt.android)
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
+
     ksp(libs.hilt.compiler)
 
     testImplementation(libs.junit)
