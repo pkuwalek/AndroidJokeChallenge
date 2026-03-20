@@ -1,10 +1,16 @@
 package com.challenge.myapplication.ui.screens.list
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -12,7 +18,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -30,11 +35,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.challenge.myapplication.ui.base.EntryButton
 import com.challenge.myapplication.ui.model.JokeUiModel
 import com.challenge.myapplication.ui.screens.ErrorScreen
 import com.challenge.myapplication.ui.theme.AndroidChallengeTheme
@@ -51,6 +58,7 @@ fun JokeListScreen(
         else -> JokeList(
             jokeList = uiState.jokesList,
             onNavigateBack = onNavigateBack,
+            onLoadMore = { jokeListViewModel.onLoadJokes() },
         )
     }
 }
@@ -60,6 +68,7 @@ fun JokeListScreen(
 private fun JokeList(
     jokeList: List<JokeUiModel>?,
     onNavigateBack: () -> Unit,
+    onLoadMore: () -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -92,11 +101,20 @@ private fun JokeList(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             jokeList?.forEach { joke ->
                 JokeCard(joke = joke)
             }
+            EntryButton(
+                text = "Load more",
+                modifier = Modifier
+                    .padding(top = 8.dp, bottom = 16.dp),
+                onClick = {
+                    onLoadMore()
+                },
+            )
         }
     }
 }
@@ -109,7 +127,7 @@ private fun JokeCard(
     val dialogShape = RoundedCornerShape(12.dp)
 
     Card(
-        modifier = Modifier.padding(vertical = 16.dp)
+        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
         Column(
             modifier = Modifier
@@ -129,20 +147,30 @@ private fun JokeCard(
                     text = it,
                 )
             }
-            joke.bottomText?.let {
-                if (!punchlineVisible) {
-                    Button(
-                        modifier = Modifier.padding(top = 16.dp),
-                        onClick = {
-                            punchlineVisible = true
-                        },
+            joke.bottomText?.let { punchline ->
+                Spacer(modifier = Modifier.height(16.dp))
+                val overlayAlpha by animateFloatAsState(
+                    targetValue = if (punchlineVisible) 0f else 1f,
+                    label = "overlay_alpha",
+                )
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.clickable(
+                        enabled = !punchlineVisible,
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() },
                     ) {
-                        Text(text = "show punchline")
-                    }
-                }
-                if (punchlineVisible) {
+                        punchlineVisible = true
+                    },
+                ) {
                     Text(
-                        text = it,
+                        text = punchline,
+                        modifier = Modifier.blur(if (punchlineVisible) 0.dp else 12.dp),
+                    )
+                    Text(
+                        text = "Tap to reveal",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = overlayAlpha),
                     )
                 }
             }

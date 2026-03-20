@@ -24,21 +24,19 @@ internal class JokeListViewModel @Inject constructor(
     }
 
     private fun initScreen() {
-        getJokesList()
+        onLoadJokes()
     }
 
-    fun getJokesList() {
+    fun onLoadJokes() {
         viewModelScope.launch {
             getJokesListUseCase.invoke().ifRight { jokes ->
                 _uiState.update {
                     it.copy(
-                        jokesList = jokes.map { joke -> uiModelMapper.mapJokeToUiModel(joke) },
+                        jokesList = it.jokesList.orEmpty() + jokes.map { joke -> uiModelMapper.mapJokeToUiModel(joke) },
                     )
                 }
             }.ifLeft { _ ->
-                _uiState.update {
-                    it.copy(error = true)
-                }
+                _uiState.update { it.copy(error = true) }
             }
         }
     }
