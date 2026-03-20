@@ -117,6 +117,7 @@ fun SingleTwoPartJokeDialogPreview() {
     AndroidChallengeTheme {
         SingleJokeDialog(
             joke = JokeUiModel(
+                id = 0,
                 topText = "To prove he was right, the flat-earther walked to the end of the Earth.",
                 bottomText = "He eventually came around",
                 category = "misc",
@@ -132,6 +133,7 @@ fun SingleOnePartJokeDialogPreview() {
     AndroidChallengeTheme {
         SingleJokeDialog(
             joke = JokeUiModel(
+                id = 0,
                 topText = "To prove he was right, the flat-earther walked to the end of the Earth.",
                 bottomText = null,
                 category = "misc",
